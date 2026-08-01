@@ -41,5 +41,44 @@ async function fetchWeather(city) {
     );
     const weatherData = await weatherResponse.json();
     cityName.textContent = `${place.name}, ${place.country}`;
-  } catch (error) {}
+    temperature.textContent = `${Math.round(weatherData.current.temperature_2m)}°C`;
+    humidity.textContent = `${weatherData.current.relative_humidity_2m}%`;
+    wind.textContent = `${Math.round(weatherData.current.wind_speed_10m)}km/h`;
+    description.textContent = getWeatherDescription(
+      weatherData.current.weather_code,
+    );
+  } catch (error) {
+    cityName.textContent = "City not found";
+    temperature.textContent = "--°C";
+    description.textContent = "Please enter a valid city.";
+    humidity.textContent = "--";
+    wind.textContent = "--";
+  }
+}
+
+function getWeatherDescription(code) {
+  const weatherCodes = {
+    0: "Clear Sky",
+    1: "Mainly Clear",
+    2: "Partly Cloudy",
+    3: "Overcast",
+    45: "Fog",
+    48: "Rime Fog",
+    51: "Light Drizzle",
+    53: "Moderate Drizzle",
+    55: "Heavy Drizzle",
+    61: "Slight Rain",
+    63: "Moderate Rain",
+    65: "Heavy Rain",
+    71: "Slight Snow",
+    73: "Moderate Snow",
+    75: "Heavy Snow",
+    80: "Rain Showers",
+    81: "Moderate Rain Showers",
+    82: "Heavy Rain Showers",
+    95: "Thunderstorm",
+    96: "Thunderstorm with Hail",
+    99: "Severe Thunderstorm",
+  };
+  return weatherCodes[code] || "Unknown Weather";
 }
